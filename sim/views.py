@@ -128,6 +128,7 @@ def _update_record(webhook_event) -> None:
         checkout_record = models.CheckoutSessionRecord.objects.get(
             stripe_checkout_session_id=data_object['id']
         )
+        checkout_record.stripe_customer_id = data_object['customer']
         checkout_record.has_access = True
         checkout_record.save()
         print('🔔 Payment succeeded!')
@@ -137,7 +138,7 @@ def _update_record(webhook_event) -> None:
         print('✍️ Subscription updated')
     elif event_type == 'customer.subscription.deleted':
         checkout_record = models.CheckoutSessionRecord.objects.get(
-            stripe_customer_id=data_object['id']
+            stripe_customer_id=data_object['']
         )
         checkout_record.has_access = False
         checkout_record.save()
